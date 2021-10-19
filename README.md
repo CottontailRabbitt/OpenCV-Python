@@ -1,1 +1,1 @@
-# OpenCV-Python-Study
+# OpenCV-Python
