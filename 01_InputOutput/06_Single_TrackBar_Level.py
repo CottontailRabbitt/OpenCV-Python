@@ -10,11 +10,11 @@ def on_level_change(pos):
         value = 255
 
     img[:] = value
-    cv2.imshow('image', img)
+    cv2.imshow('Level TrackBar', img)
 
 
 img = np.zeros((480, 640), np.uint8)
-cv2.namedWindow('Level TrackBar')
+cv2.namedWindow('image')
 
 # 창이 생성된 이후에 호출해야 한다.
 cv2.createTrackbar('level', 'image', 0, 16, on_level_change)
