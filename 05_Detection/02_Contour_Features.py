@@ -5,22 +5,22 @@ capture = cv2.VideoCapture(0)
 capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-thr_min = 120
-thr_max = 255
+thr_min = 128
+thr_max = 128
 
 def on_thresold_min_change(pos):
     global thr_min
-    thr_min = np.clip(pos, 0, 255)
+    thr_min = np.clip(pos * 2, 0, 255)
 
 def on_thresold_max_change(pos):
     global thr_max 
-    thr_max = np.clip(pos, 0, 255)
+    thr_max = np.clip(pos * 2, 0, 255)
 
 cv2.namedWindow('Birary')
 
 
-cv2.createTrackbar('thresold min', 'Birary', 1, 16, on_thresold_min_change)
-cv2.createTrackbar('thresold max', 'Birary', 4, 16, on_thresold_max_change)
+cv2.createTrackbar('thresold min', 'Birary', 108, 128, on_thresold_min_change)
+cv2.createTrackbar('thresold max', 'Birary', 128, 128, on_thresold_max_change)
 
 while cv2.waitKey(33) < 0:
     ret, frame = capture.read()
@@ -50,9 +50,9 @@ while cv2.waitKey(33) < 0:
     #cv2.imshow('grayimg', gray)
     #cv2.namedWindow('binimg')
     #cv2.imshow('binimg', binary)
-    
-    cv2.imshow('Birary', binary)
     cv2.imshow('Result', frame)
+    cv2.imshow('Birary', binary)
+    
 
 
 

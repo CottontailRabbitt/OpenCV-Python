@@ -16,11 +16,11 @@ def on_thresold_max_change(pos):
     global thr_max 
     thr_max = np.clip(pos * 2, 0, 255)
 
-cv2.namedWindow('Binary')
+cv2.namedWindow('Birary')
 
 
-cv2.createTrackbar('thresold min', 'Binary', 102, 128, on_thresold_min_change)
-cv2.createTrackbar('thresold max', 'Binary', 128, 128, on_thresold_max_change)
+cv2.createTrackbar('thresold min', 'Birary', 108, 128, on_thresold_min_change)
+cv2.createTrackbar('thresold max', 'Birary', 128, 128, on_thresold_max_change)
 
 while cv2.waitKey(33) < 0:
     ret, frame = capture.read()
@@ -29,17 +29,20 @@ while cv2.waitKey(33) < 0:
     ret, binary = cv2.threshold(gray, thr_min, thr_max, cv2.THRESH_BINARY)
     binary = cv2.bitwise_not(binary)
 
-    contours, hierarchy = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_KCOS)
+    contours, hierarchy = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-    for contour in contours:
-        epsilon = cv2.arcLength(contour, True) * 0.02
-        approx_poly = cv2.approxPolyDP(contour, epsilon, True)
+    for i in range(len(contours)):
+        cv2.drawContours(frame, [contours[i]], 0, (0, 0, 255), 2)
+        cv2.putText(frame, str(i), tuple(contours[i][0][0]), cv2.FONT_HERSHEY_COMPLEX, 0.8, (0, 255, 0), 1)
+        
+    for cnt in contours:
+        hull = cv2.convexHull(cnt)
+        cv2.drawContours(frame, [hull], 0, (255, 0, 255), 5)
+        
 
-        for approx in approx_poly:
-            cv2.circle(frame, tuple(approx[0]), 3, (255, 0, 0), -1)
-
-    cv2.imshow('Binary', binary)
     cv2.imshow('Result', frame)
+    cv2.imshow('Birary', binary)
+    
 
 
 
