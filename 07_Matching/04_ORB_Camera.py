@@ -1,6 +1,4 @@
-import cv2
 import numpy as np
-
 import cv2
 
 capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -9,6 +7,7 @@ capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 cropping = False
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
+
 
 
 def mouse_crop(event, x, y, flags, param):
@@ -44,6 +43,8 @@ def mouse_crop(event, x, y, flags, param):
 cv2.namedWindow("image")
 cv2.setMouseCallback("image", mouse_crop)
 
+
+
 while cv2.waitKey(33) < 0:
 
     ret, frame = capture.read()
@@ -57,6 +58,38 @@ while cv2.waitKey(33) < 0:
 
     cv2.waitKey(1)
 
+
+while cv2.waitKey(33) < 0:
+    
+    ret, frame = capture.read()
+    refPoint = [(x_start, y_start), (x_end, y_end)]
+    if len(refPoint) == 2: #when two points were found
+        roi = cropped[refPoint[0][1]:refPoint[1][1], refPoint[0][0]:refPoint[1][0]]
+        
+    
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cropped_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+
+    orb = cv2.ORB_create()
+    kp1, des1 = orb.detectAndCompute(frame_gray,None)
+    kp2, des2 = orb.detectAndCompute(cropped_gray,None)
+
+    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+    matches = bf.match(des1,des2)
+
+    matches = sorted(matches, key = lambda x:x.distance)
+
+    result = cv2.drawMatches(frame_gray,kp1,cropped_gray,kp2,matches[:10],None,flags=2)
+
+    cv2.imshow('img', frame_gray)
+    cv2.imshow('cropped', cropped_gray)
+    cv2.imshow('result', result)
+    
+    cv2.waitKey(1)
+
 capture.release()
 cv2.destroyAllWindows()
+
+
 

@@ -1,7 +1,7 @@
 import cv2
 
 #영상 읽어서 그레이 스케일로 변환
-img = cv2.imread('../img/pistol.jpg')
+img = cv2.imread('11_Samples/stuff_temp.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # 8x8 크기로 축소 ---①

@@ -1,21 +1,22 @@
 # Tracker APIs (track_trackingAPI.py)
+# 출처 : https://bkshin.tistory.com/entry/OpenCV-32-%EA%B0%9D%EC%B2%B4-%EC%B6%94%EC%A0%81%EC%9D%84-%EC%9C%84%ED%95%9C-Tracking-API
 
 import cv2
 
 # 트랙커 객체 생성자 함수 리스트 ---①
-trackers = [cv2.legacy.TrackerBoosting_create(),
-            cv2.legacy.TrackerMIL_create(),
-            cv2.legacy.TrackerKCF_create(),
-            cv2.legacy.TrackerTLD_create(),
-            cv2.legacy.TrackerMedianFlow_create(),
-            cv2.legacy.TrackerCSRT_create(),
-            cv2.legacy.TrackerMOSSE_create()]
-trackerIdx = 0  # 트랙커 생성자 함수 선택 인덱스
+trackers = [cv2.legacy.TrackerBoosting_create,
+            cv2.legacy.TrackerMIL_create,
+            cv2.legacy.TrackerKCF_create,
+            cv2.legacy.TrackerTLD_create,
+            cv2.legacy.TrackerMedianFlow_create,
+            cv2.legacy.TrackerCSRT_create,
+            cv2.legacy.TrackerMOSSE_create]
+trackerIdx = 6  # 트랙커 생성자 함수 선택 인덱스
 tracker = None
 isFirst = True
 
 #video_src = 0 # 비디오 파일과 카메라 선택 ---②
-video_src = "c:/Users/geon/Project/OpenCV-Python/11_Samples/video/slow_traffic_small.mp4"
+video_src = "11_Samples/video/slow_traffic_small.mp4"
 cap = cv2.VideoCapture(video_src)
 fps = cap.get(cv2.CAP_PROP_FPS) # 프레임 수 구하기
 delay = int(1000/fps)
@@ -47,15 +48,26 @@ while cap.isOpened():
     # 스페이스 바 또는 비디오 파일 최초 실행 ---④
     if key == ord(' ') or (video_src != 0 and isFirst): 
         isFirst = False
-        roi = cv2.selectROI(win_name, frame, False)  # 초기 객체 위치 설정
-        if roi[2] and roi[3]:         # 위치 설정 값 있는 경우
-            tracker = trackers[trackerIdx]()    #트랙커 객체 생성 ---⑤
+        # 초기 객체 위치 설정
+
+        roi = cv2.selectROI(win_name, frame, False)  
+        # 위치 설정 값 있는 경우
+
+        if roi[2] and roi[3]:         
+            #트랙커 객체 생성 ---⑤
+            tracker = trackers[trackerIdx]()    
             isInit = tracker.init(frame, roi)
-    elif key in range(48, 56): # 0~7 숫자 입력   ---⑥
-        trackerIdx = key-48     # 선택한 숫자로 트랙커 인덱스 수정
+    elif key in range(48, 55): 
+        # 0~6 숫자 입력   ---⑥
+
+        # 선택한 숫자로 트랙커 인덱스 수정
+        trackerIdx = key-48    
         if bbox is not None:
-            tracker = trackers[trackerIdx]() # 선택한 숫자의 트랙커 객체 생성 ---⑦
-            isInit = tracker.init(frame, bbox) # 이전 추적 위치로 추적 위치 초기화
+            # 선택한 숫자의 트랙커 객체 생성 ---⑦
+            tracker = trackers[trackerIdx]() 
+
+             # 이전 추적 위치로 추적 위치 초기화
+            isInit = tracker.init(frame, bbox)
     elif key == 27 : 
         break
 else:
