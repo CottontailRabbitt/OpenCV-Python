@@ -20,6 +20,6 @@ for row in bin.tolist():
 dhash = ''.join(dhash)
 print(dhash)
 
-cv2.namedWindow('pistol', cv2.WINDOW_GUI_NORMAL)
-cv2.imshow('pistol', img)
+cv2.namedWindow('stuff', cv2.WINDOW_GUI_NORMAL)
+cv2.imshow('stuff', img)
 cv2.waitKey(0)

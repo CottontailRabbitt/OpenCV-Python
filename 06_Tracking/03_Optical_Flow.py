@@ -40,8 +40,9 @@ while(1):
     for i,(new,old) in enumerate(zip(good_new, good_old)):
         a,b = new.ravel()
         c,d = old.ravel()
-        mask = cv2.line(mask, (a,b),(c,d), color[i].tolist(), 2)
-        frame = cv2.circle(frame,(a,b),5,color[i].tolist(),1)
+
+        mask = cv2.line(mask, (int(a),int(b)),(int(c),int(d)), color[i].tolist(), 2)
+        frame = cv2.circle(frame,(int(a),int(b)),5,color[i].tolist(),1)
     img = cv2.add(frame,mask)
     cv2.imshow('frame',img)
     k = cv2.waitKey(30) & 0xff
