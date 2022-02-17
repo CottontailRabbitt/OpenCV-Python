@@ -7,7 +7,7 @@ import os.path
 prjpath = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 print(prjpath)
 
-imgpath = prjpath + "\\10_Samples\starry_night.jpg"
+imgpath = prjpath + "\\11_Samples\starry_night.jpg"
 print(imgpath)
 
 img = cv.imread(imgpath)
